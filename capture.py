@@ -9,6 +9,7 @@ folderN = 1
 num = 1
 
 cam = Picamera2()
+cam.start()
 
 while newFolder:
     if os.path.exists(f"trials/trial{folderN}"):
@@ -26,9 +27,10 @@ with open(f"trials/trial{folderN}/data.csv",'w') as csvfile:
     while True:
         if(pretime + 10 <= time.time()):
             pretime = time.time()
-            cam.start_and_capture_file(f"trials/trial{folderN}/images/{num}.jpg")
+            cam.capture_file(f"trials/trial{folderN}/images/{num}.jpg")
             filewriter.writerow({'ID':num,'Time':time.asctime(time.localtime()),'Picture':f"trials/trial{folderN}/images/{num}",'Fishes':0})
             num += 1
+            
 
 
 
