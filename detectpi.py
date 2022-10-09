@@ -142,7 +142,7 @@ def detect(save_img=False):
                             # Print results
                             for c in det[:, -1].unique():
                                 n = (det[:, -1] == c).sum()  # detections per class
-                                found = n
+                                found = n.item()
                                 s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "  # add to string
 
                             # Write results
@@ -159,7 +159,7 @@ def detect(save_img=False):
 
                         # Print time (inference + NMS)
                         print(f'{s}Done. ({(1E3 * (t2 - t1)):.1f}ms) Inference, ({(1E3 * (t3 - t2)):.1f}ms) NMS')
-                        filewriter.writerow({'ID':num,'Time':time.asctime(time.localtime()),'Picture':f"trials/trial{folderN}/images/{num}",'Fishes':str(found).split("(")[1][:-1]})
+                        filewriter.writerow({'ID':num,'Time':time.asctime(time.localtime()),'Picture':f"trials/trial{folderN}/images/{num}",'Fishes':found})
 
                         # Stream results
                         if view_img:
