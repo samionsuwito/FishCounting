@@ -159,7 +159,7 @@ def detect(save_img=False):
 
                         # Print time (inference + NMS)
                         print(f'{s}Done. ({(1E3 * (t2 - t1)):.1f}ms) Inference, ({(1E3 * (t3 - t2)):.1f}ms) NMS')
-                        filewriter.writerow({'ID':num,'Time':time.asctime(time.localtime()),'Picture':f"trials/trial{folderN}/images/{num}",'Fishes':found})
+                        filewriter.writerow({'ID':num,'Time':time.asctime(time.localtime()),'Picture':f"trials/trial{folderN}/images/{num}",'Fishes':str(found).split("(")[1][:-1]})
 
                         # Stream results
                         if view_img:
