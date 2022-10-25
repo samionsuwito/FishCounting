@@ -38,6 +38,7 @@ def detect(save_img=False):
         else:
             os.mkdir(f"trials/trial{folderN}")
             os.mkdir(f"trials/trial{folderN}/images")
+            os.mkdir(f"trials/trial{folderN}/contrast")
             os.mkdir(f"trials/trial{folderN}/annotated")
             newFolder = False
 
@@ -82,8 +83,16 @@ def detect(save_img=False):
         while True:
             if(pretime + 10 <= time.time()):
                 pretime = time.time()
-                cam.capture_file(f"trials/trial{folderN}/images/{num}.jpg")
-                source = f"trials/trial{folderN}/images/{num}.jpg"
+                pimg = cam.capture_array("main")
+                cv2.imwrite(f"trials/trial{folderN}/images/{num}.jpg",pimg)
+                lab = cv2.cvtColor(pimg, cv2.COLOR_BGR2LAB)
+                l_c, api, bpi = cv2.split(lab)
+                clahe = cv2.createCLAHE(clipLimit=3, tileGridSize=(8,8))
+                cl = clahe.apply(l_c)
+                limg = cv2.merge((cl,api,bpi))
+                final_img = cv2.cvtColor(limg, cv2.COLOR_LAB2BGR)
+                cv2.imwrite(f"trials/trial{folderN}/contrast/c{num}.jpg", final_img)
+                source = f"trials/trial{folderN}/contrast/c{num}.jpg"
                 dataset = LoadImages(source, img_size=imgsz, stride=stride)
 
                 # Get names and colors
@@ -159,7 +168,7 @@ def detect(save_img=False):
 
                         # Print time (inference + NMS)
                         print(f'{s}Done. ({(1E3 * (t2 - t1)):.1f}ms) Inference, ({(1E3 * (t3 - t2)):.1f}ms) NMS')
-                        filewriter.writerow({'ID':num,'Time':time.asctime(time.localtime()),'Picture':f"trials/trial{folderN}/images/{num}",'Fishes':found})
+                        filewriter.writerow({'ID':num,'Time':time.asctime(time.localtime()),'Picture':f"trials/trial{folderN}/contrast/c{num}",'Fishes':found})
                         found = 0
                         # Stream results
                         if view_img:

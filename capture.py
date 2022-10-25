@@ -34,7 +34,7 @@ with open(f"trials/trial{folderN}/data.csv",'w') as csvfile:
             #contrast part
             #img = cv2.imread(f"trials/trial{folderN}/images/{num}.jpg", 1)
             l = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
-            l_c, a, b = cv2.split(lab)
+            l_c, a, b = cv2.split(l)
             clahe = cv2.createCLAHE(clipLimit=3, tileGridSize=(8,8))
             cl = clahe.apply(l_c)
             limg = cv2.merge((cl,a,b))
@@ -50,3 +50,4 @@ with open(f"trials/trial{folderN}/data.csv",'w') as csvfile:
 
 
         
+
